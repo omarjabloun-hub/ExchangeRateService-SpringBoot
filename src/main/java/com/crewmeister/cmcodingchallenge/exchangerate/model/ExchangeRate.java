@@ -2,7 +2,7 @@ package com.crewmeister.cmcodingchallenge.exchangerate.model;
 
 import com.crewmeister.cmcodingchallenge.currency.model.Currency;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

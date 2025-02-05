@@ -6,19 +6,24 @@ import com.crewmeister.cmcodingchallenge.currency.model.Currency;
 import com.crewmeister.cmcodingchallenge.currency.repository.CurrencyRepository;
 import com.crewmeister.cmcodingchallenge.exchangerate.dto.AggregatedRatesResponse;
 import com.crewmeister.cmcodingchallenge.exchangerate.dto.ExchangeRateDto;
+import com.crewmeister.cmcodingchallenge.exchangerate.dto.ExchangeRateTransformer;
 import com.crewmeister.cmcodingchallenge.exchangerate.model.ExchangeRate;
 import com.crewmeister.cmcodingchallenge.exchangerate.repository.ExchangeRateRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExchangeRateServiceImpl implements ExchangeRateService {
@@ -27,26 +32,47 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     private final CurrencyRepository currencyRepository;
     private final BundesbankApiClient bundesbankApiClient;
     private final ExchangeRateRepository exchangeRateRepository;
+    private final ExchangeRateTransformer exchangeRateTransformer;
 
-    public ExchangeRateServiceImpl(CurrencyRepository currencyRepository, BundesbankApiClient bundesbankApiClient, ExchangeRateRepository exchangeRateRepository) {
+
+    public ExchangeRateServiceImpl(CurrencyRepository currencyRepository, BundesbankApiClient bundesbankApiClient, ExchangeRateRepository exchangeRateRepository, ExchangeRateTransformer exchangeRateTransformer) {
         this.currencyRepository = currencyRepository;
         this.bundesbankApiClient = bundesbankApiClient;
         this.exchangeRateRepository = exchangeRateRepository;
+        this.exchangeRateTransformer = exchangeRateTransformer;
     }
 
     @Override
     public List<AggregatedRatesResponse> getAggregatedRates(LocalDate date, int page, int size) {
-        Page<AggregatedRatesResponse> pageResponse;
-        if (date != null) {
-            // Use the overloaded method that filters by date at the repository level.
-            // TODO : Keep normal methods and make a method that transform list of exchange rates to a aggregated exchange rate without the need to directly transform it
-            Collection<ExchangeRate> exchangeRates = exchangeRateRepository.findAllExchangeRatesByRateDate(date);
+        Pageable pageable = PageRequest.of(page, size);
 
-            pageResponse = exchangeRateRepository.findAggregatedExchangeRatesByDate(date, PageRequest.of(page, size));
+        if (date != null) {
+            // When a date is provided, get all rates for that date...
+            Collection<ExchangeRate> exchangeRates = exchangeRateRepository.findAllExchangeRatesByRateDate(date);
+            // ...transform them into a single AggregatedRatesResponse...
+            AggregatedRatesResponse aggregatedResponse = exchangeRateTransformer.transform(exchangeRates.stream().collect(Collectors.toList()));
+            // ...and wrap it into a Page (if you want to preserve the paging contract).
+            Page<AggregatedRatesResponse> pageResponse =
+                    new PageImpl<>(Collections.singletonList(aggregatedResponse), pageable, 1);
+            return pageResponse.getContent();
         } else {
-            pageResponse = exchangeRateRepository.findAggregatedExchangeRates(PageRequest.of(page, size));
+            // When no date is provided, we want aggregated responses per distinct date.
+            // Step 1: Get a paginated list of distinct rate dates.
+            Page<LocalDate> distinctDatesPage = exchangeRateRepository.findDistinctRateDates(pageable);
+
+            // Step 2: For each date, get its exchange rates and transform them.
+            List<AggregatedRatesResponse> aggregatedResponses = distinctDatesPage.getContent().stream()
+                    .map(rateDate -> {
+                        Collection<ExchangeRate> rates = exchangeRateRepository.findAllExchangeRatesByRateDate(rateDate);
+                        return exchangeRateTransformer.transform(rates.stream().collect(Collectors.toList()));
+                    })
+                    .collect(Collectors.toList());
+
+            // Optionally, you can wrap this list into a Page as well.
+            Page<AggregatedRatesResponse> pageResponse =
+                    new PageImpl<>(aggregatedResponses, pageable, distinctDatesPage.getTotalElements());
+            return pageResponse.getContent();
         }
-        return pageResponse.getContent();
     }
 
     /**
