@@ -7,6 +7,7 @@ import com.crewmeister.cmcodingchallenge.util.DocumentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class BundesbankApiClientImpl implements BundesbankApiClient {
                 + "&endPeriod=" + endPeriod
                 + "&detail=dataonly";
     }
-
+    @Cacheable(value = "bundesbankData", key = "{#currencyCode, #startPeriod, #endPeriod}")
     @Override
     public List<ExchangeRateDto> fetchExchangeRates(String currencyCode, String startPeriod, String endPeriod) {
         List<ExchangeRateDto> exchangeRateDTOList = new ArrayList<>();
