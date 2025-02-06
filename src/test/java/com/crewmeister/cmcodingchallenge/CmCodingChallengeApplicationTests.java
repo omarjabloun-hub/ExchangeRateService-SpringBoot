@@ -22,47 +22,47 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CmCodingChallengeApplicationTests {
-	private static final Logger logger = LoggerFactory.getLogger(CmCodingChallengeApplicationTests.class);
+    private static final Logger logger = LoggerFactory.getLogger(CmCodingChallengeApplicationTests.class);
 
-	@Mock
-	private ExchangeRateRepository exchangeRateRepository;
+    @Mock
+    private ExchangeRateRepository exchangeRateRepository;
 
-	@InjectMocks
-	private ConversionServiceImpl conversionService;
+    @InjectMocks
+    private ConversionServiceImpl conversionService;
 
-	@Test
-	public void testConvert() {
-		logger.info("Starting testConvert");
-		// Arrange: Set up our test data.
-		String currencyCode = "USD";
-		LocalDate date = LocalDate.of(2025, 2, 4);
-		BigDecimal originalAmount = new BigDecimal("100");
-		BigDecimal exchangeRateValue = new BigDecimal("1.0335");
+    @Test
+    public void testConvert() {
+        logger.info("Starting testConvert");
+        // Arrange: Set up our test data.
+        String currencyCode = "USD";
+        LocalDate date = LocalDate.of(2025, 2, 4);
+        BigDecimal originalAmount = new BigDecimal("100");
+        BigDecimal exchangeRateValue = new BigDecimal("1.0335");
 
-		Currency currency = new Currency();
-		currency.setCode(currencyCode);
+        Currency currency = new Currency();
+        currency.setCode(currencyCode);
 
-		ExchangeRate exchangeRate = new ExchangeRate(currency, date, exchangeRateValue);
+        ExchangeRate exchangeRate = new ExchangeRate(currency, date, exchangeRateValue);
 
-		// Stub the repository method to return a singleton list containing our exchange rate.
-		when(exchangeRateRepository.findExchangeRateByCurrency_CodeAndRateDate(currencyCode, date))
-				.thenReturn(Collections.singletonList(exchangeRate));
+        // Stub the repository method to return a singleton list containing our exchange rate.
+        when(exchangeRateRepository.findExchangeRateByCurrency_CodeAndRateDate(currencyCode, date))
+                .thenReturn(Collections.singletonList(exchangeRate));
 
-		// Act: Call the convert method.
-		ConversionDto conversionDto = conversionService.convert(currencyCode, date, originalAmount);
-		logger.info("Conversion result: currency: {}, date: {}, originalAmount: {}, exchangeRate: {}, convertedAmount: {}",
-				conversionDto.getCurrency(),
-				conversionDto.getDate(),
-				conversionDto.getOriginalAmount(),
-				conversionDto.getExchangeRate(),
-				conversionDto.getConvertedAmount());
+        // Act: Call the convert method.
+        ConversionDto conversionDto = conversionService.convert(currencyCode, date, originalAmount);
+        logger.info("Conversion result: currency: {}, date: {}, originalAmount: {}, exchangeRate: {}, convertedAmount: {}",
+                conversionDto.getCurrency(),
+                conversionDto.getDate(),
+                conversionDto.getOriginalAmount(),
+                conversionDto.getExchangeRate(),
+                conversionDto.getConvertedAmount());
 
-		// Assert: Verify that the returned ConversionDto contains the expected values.
-		assertEquals(currencyCode, conversionDto.getCurrency());
-		assertEquals(date, conversionDto.getDate());
-		assertEquals(originalAmount, conversionDto.getOriginalAmount());
-		assertEquals(exchangeRateValue, conversionDto.getExchangeRate());
-		assertEquals(new BigDecimal("96.76"), conversionDto.getConvertedAmount());
-		logger.info("testConvert completed successfully");
-	}
+        // Assert: Verify that the returned ConversionDto contains the expected values.
+        assertEquals(currencyCode, conversionDto.getCurrency());
+        assertEquals(date, conversionDto.getDate());
+        assertEquals(originalAmount, conversionDto.getOriginalAmount());
+        assertEquals(exchangeRateValue, conversionDto.getExchangeRate());
+        assertEquals(new BigDecimal("96.76"), conversionDto.getConvertedAmount());
+        logger.info("testConvert completed successfully");
+    }
 }

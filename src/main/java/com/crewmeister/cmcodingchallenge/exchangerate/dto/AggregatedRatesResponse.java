@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class AggregatedRatesResponse {
-    private LocalDate date;
-    private Map<String, BigDecimal> rates;
+    private final LocalDate date;
+    private final Map<String, BigDecimal> rates;
 
     public AggregatedRatesResponse(LocalDate date, Map<String, BigDecimal> rates) {
         this.date = date;

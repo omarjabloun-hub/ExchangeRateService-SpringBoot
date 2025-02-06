@@ -10,7 +10,8 @@ import java.time.LocalDate;
 @Table(name = "exchange_rate")
 public class ExchangeRate {
 
-    public ExchangeRate() {}
+    public ExchangeRate() {
+    }
 
     public ExchangeRate(Currency currency, LocalDate rateDate, BigDecimal rate) {
         this.currency = currency;
@@ -37,19 +38,24 @@ public class ExchangeRate {
     public Currency getCurrency() {
         return currency;
     }
+
     public LocalDate getRateDate() {
         return rateDate;
     }
+
     public BigDecimal getRate() {
         return rate;
     }
+
     public String getCurrencyCode() {
         return currency.getCode();
     }
+
     // setter
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
     public void setRateDate(LocalDate rateDate) {
         this.rateDate = rateDate;
     }

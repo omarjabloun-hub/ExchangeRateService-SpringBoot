@@ -24,18 +24,23 @@ public class GetExchangeRatesRequest {
     public int getPage() {
         return page;
     }
+
     public int getSize() {
         return size;
     }
+
     public LocalDate getDate() {
         return date;
     }
+
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
     public void setPage(int page) {
         this.page = page;
     }
+
     public void setSize(int size) {
         this.size = size;
     }

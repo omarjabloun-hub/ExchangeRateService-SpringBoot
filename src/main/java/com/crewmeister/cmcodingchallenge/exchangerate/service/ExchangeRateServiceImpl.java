@@ -46,7 +46,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    @Cacheable(value = "exchangeRates" , key = "#date != null ? #date.toString() + '_' + #page + '_' + #size : 'all_' + #page + '_' + #size")
+    @Cacheable(value = "exchangeRates", key = "#date != null ? #date.toString() + '_' + #page + '_' + #size : 'all_' + #page + '_' + #size")
     public List<AggregatedRatesResponse> getAggregatedRates(LocalDate date, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
@@ -76,6 +76,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     /**
      * Update exchange rates for a specific currency by calling the BundesbankApiClient and
      * processing the results to update the DB.
+     *
      * @param currencyCode currency code (e.g. "PLN")
      */
     @CacheEvict(value = "exchangeRates", allEntries = true)
@@ -112,7 +113,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
                 }
             }
             // Update currency lastUpdated
-            String validFrom = LocalDate.now().toString() ;
+            String validFrom = LocalDate.now().toString();
             currency.setLastUpdated(validFrom);
             currencyRepository.save(currency);
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+
 @Validated
 @RestController
 @RequestMapping("/api")
@@ -27,6 +28,7 @@ public class ExchangeRateController {
             @Valid GetExchangeRatesRequest request
     ) {
         List<AggregatedRatesResponse> aggregatedRates =
-                exchangeRateService.getAggregatedRates(request.getDate(), request.getPage(), request.getSize());        return ResponseEntity.ok(aggregatedRates);
+                exchangeRateService.getAggregatedRates(request.getDate(), request.getPage(), request.getSize());
+        return ResponseEntity.ok(aggregatedRates);
     }
 }

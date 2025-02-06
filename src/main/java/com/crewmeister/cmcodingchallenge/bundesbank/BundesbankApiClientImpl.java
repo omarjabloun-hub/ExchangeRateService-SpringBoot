@@ -3,7 +3,6 @@ package com.crewmeister.cmcodingchallenge.bundesbank;
 
 import com.crewmeister.cmcodingchallenge.exchangerate.dto.ExchangeRateDto;
 import com.crewmeister.cmcodingchallenge.util.DocumentUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +44,7 @@ public class BundesbankApiClientImpl implements BundesbankApiClient {
                 + "&endPeriod=" + endPeriod
                 + "&detail=dataonly";
     }
+
     @Cacheable(value = "bundesbankData", key = "{#currencyCode, #startPeriod, #endPeriod}")
     @Override
     public List<ExchangeRateDto> fetchExchangeRates(String currencyCode, String startPeriod, String endPeriod) {
@@ -70,10 +70,10 @@ public class BundesbankApiClientImpl implements BundesbankApiClient {
             }
         } catch (ParserConfigurationException | IOException | SAXException ex) {
             logger.error(ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, messageSource.getMessage("CannotParseXml",null,locale));
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, messageSource.getMessage("CannotParseXml", null, locale));
         } catch (HttpClientErrorException ex) {
             logger.error(ex.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, messageSource.getMessage("CannotGetDataFromService",null,locale));
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, messageSource.getMessage("CannotGetDataFromService", null, locale));
         }
         return exchangeRateDTOList;
     }

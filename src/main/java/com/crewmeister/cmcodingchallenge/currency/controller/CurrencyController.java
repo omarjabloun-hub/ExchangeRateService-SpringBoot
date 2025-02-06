@@ -1,7 +1,7 @@
 package com.crewmeister.cmcodingchallenge.currency.controller;
 
-import com.crewmeister.cmcodingchallenge.currency.repository.CurrencyRepository;
 import com.crewmeister.cmcodingchallenge.currency.model.Currency;
+import com.crewmeister.cmcodingchallenge.currency.repository.CurrencyRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import java.util.List;
 public class CurrencyController {
 
     private final CurrencyRepository currencyRepository;
+
     public CurrencyController(CurrencyRepository currencyRepository) {
         this.currencyRepository = currencyRepository;
     }
@@ -22,7 +23,7 @@ public class CurrencyController {
     @GetMapping("/currencies")
     public ResponseEntity<List<Currency>> getCurrencies() {
 
-         List<Currency> currencies = currencyRepository.findAll();
+        List<Currency> currencies = currencyRepository.findAll();
         return new ResponseEntity<>(currencies, HttpStatus.OK);
     }
 }

@@ -1,6 +1,9 @@
 package com.crewmeister.cmcodingchallenge.currency.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +14,8 @@ import java.time.format.DateTimeParseException;
 @Entity
 @Table(name = "currency")
 public class Currency {
-    public Currency() {}
+    public Currency() {
+    }
 
     @Id
     @Column(name = "code", nullable = false)
@@ -52,6 +56,7 @@ public class Currency {
             this.lastUpdated = LocalDate.parse(lastUpdated, dateFormatter).atStartOfDay();
         }
     }
+
     public void setCode(String code) {
         this.code = code;
     }

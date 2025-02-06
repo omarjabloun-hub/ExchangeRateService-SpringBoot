@@ -17,6 +17,7 @@ import javax.validation.Valid;
 public class ConversionController {
 
     private final ConversionService conversionService;
+
     public ConversionController(ConversionService conversionService) {
         this.conversionService = conversionService;
     }

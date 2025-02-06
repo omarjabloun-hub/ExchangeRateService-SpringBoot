@@ -80,7 +80,7 @@ public class DataLoader implements CommandLineRunner {
                         continue;
                     }
 
-                    // check if the current line contains the expected metadata (e.g. "EUR 1 =")
+                    // check if the current line contains the expected metadata ("EUR 1 =")
                     if ((currencyCode == null || currencyDesc == null) && line.contains("EUR 1 =")) {
                         currencyCode = extractCurrencyCode(line);
                         currencyDesc = extractCurrencyDescription(line);
@@ -126,7 +126,7 @@ public class DataLoader implements CommandLineRunner {
      * If that fails (for example, if the expected pattern isn’t found), it splits the line by '/'
      * and looks for the token immediately following the token that contains "...".
      * </p>
-     *
+     * <p>
      * For example, given:
      * <br>
      * "Euro foreign exchange reference rate of the ECB / EUR 1 = LTL ... / Lithuania / up to the"
@@ -146,7 +146,6 @@ public class DataLoader implements CommandLineRunner {
             return desc;
         }
 
-        // Fallback: split by "/" and look for the token immediately following the token that contains "..."
         String[] tokens = line.split("/");
         for (int i = 0; i < tokens.length - 1; i++) {
             if (tokens[i].contains("...")) {

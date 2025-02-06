@@ -11,8 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class CmCodingChallengeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CmCodingChallengeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CmCodingChallengeApplication.class, args);
+    }
 
 }

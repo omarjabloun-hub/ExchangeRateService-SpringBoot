@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ExchangeRateService {
     List<AggregatedRatesResponse> getAggregatedRates(LocalDate date, int page, int size);
+
     void updateExchangeRates();
 }

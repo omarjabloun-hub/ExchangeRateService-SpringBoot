@@ -1,8 +1,8 @@
 package com.crewmeister.cmcodingchallenge.conversion.service;
 
 import com.crewmeister.cmcodingchallenge.conversion.dto.ConversionDto;
-import com.crewmeister.cmcodingchallenge.exchangerate.model.ExchangeRate;
 import com.crewmeister.cmcodingchallenge.exchangerate.exception.ExchangeRateNotFoundException;
+import com.crewmeister.cmcodingchallenge.exchangerate.model.ExchangeRate;
 import com.crewmeister.cmcodingchallenge.exchangerate.repository.ExchangeRateRepository;
 import org.springframework.stereotype.Service;
 

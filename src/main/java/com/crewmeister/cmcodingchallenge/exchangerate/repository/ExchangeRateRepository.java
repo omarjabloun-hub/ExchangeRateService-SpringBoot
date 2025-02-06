@@ -12,8 +12,11 @@ import java.util.Optional;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long> {
     Optional<ExchangeRate> findAllExchangeRatesByCurrency_Code(String currencyCode);
+
     Collection<ExchangeRate> findAllExchangeRatesByRateDate(java.time.LocalDate rateDate);
+
     Collection<ExchangeRate> findExchangeRateByCurrency_CodeAndRateDate(String currencyCode, java.time.LocalDate rateDate);
+
     @Query("SELECT DISTINCT er.rateDate FROM ExchangeRate er ORDER BY er.rateDate DESC")
     Page<LocalDate> findDistinctRateDates(Pageable pageable);
 }

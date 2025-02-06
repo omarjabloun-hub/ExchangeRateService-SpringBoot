@@ -1,9 +1,14 @@
 package com.crewmeister.cmcodingchallenge.conversion.dto;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
 public class ConvertCurrencyRequest {
     @NotBlank(message = "Currency must be provided.")
     @Size(min = 3, max = 3, message = "Currency should be exactly 3 characters.")
@@ -19,18 +24,23 @@ public class ConvertCurrencyRequest {
     public String getCurrency() {
         return currency;
     }
+
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+
     public BigDecimal getAmount() {
         return amount;
     }
+
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
     public LocalDate getDate() {
         return date;
     }
+
     public void setDate(LocalDate date) {
         this.date = date;
     }
