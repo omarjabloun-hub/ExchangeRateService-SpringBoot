@@ -5,9 +5,7 @@ import com.crewmeister.cmcodingchallenge.conversion.dto.ConvertCurrencyRequest;
 import com.crewmeister.cmcodingchallenge.conversion.service.ConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -22,8 +20,8 @@ public class ConversionController {
         this.conversionService = conversionService;
     }
 
-    @GetMapping("/convert")
-    public ResponseEntity<ConversionDto> convertCurrency(@Valid ConvertCurrencyRequest request) {
+    @PostMapping("/conversion")
+    public ResponseEntity<ConversionDto> convertCurrency(@RequestBody @Valid ConvertCurrencyRequest request) {
         ConversionDto conversion = conversionService.convert(request.getCurrency(), request.getDate(), request.getAmount());
         return ResponseEntity.ok(conversion);
     }

@@ -77,8 +77,16 @@ The database consists of two tables:
 
 ### 3. Convert Currency
 **Endpoint:**  
-`GET /api/convert?currency=USD&amount=100&date=2024-02-14`
+`POST /api/conversion`
 
+**Request**
+```json 
+{
+  "amount": 100,
+  "currency": "USD",
+  "date": "2025-02-14"
+}
+```
 **Response:**
 ```json
 {
