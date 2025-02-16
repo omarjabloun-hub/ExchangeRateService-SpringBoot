@@ -10,17 +10,18 @@ import java.time.LocalDate;
 
 @ApiModel(description = "Request DTO for retrieving exchange rates")
 public class GetExchangeRatesRequest {
+
     @ApiModelProperty(value = "Page number for pagination", example = "0")
-    @Min(0)
+    @Min(value = 0, message = "page.number.min")
     private int page = 0;
 
     @ApiModelProperty(value = "Number of items per page", example = "10")
-    @Min(1)
-    @Max(100)
+    @Min(value = 1, message = "page.size.min")
+    @Max(value = 100, message = "page.size.max")
     private int size = 10;
 
     @ApiModelProperty(value = "Date for retrieving exchange rates", example = "2024-02-14")
-    @PastOrPresent(message = "Date must be current or in the past.")
+    @PastOrPresent(message = "date.must.be.past.or.present")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
 
